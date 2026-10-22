@@ -2,6 +2,7 @@ import Database from 'better-sqlite3';
 import { existsSync, copyFileSync, mkdirSync, readdirSync, rmSync } from 'fs';
 import { join } from 'path';
 
+const ENABLE_BACKUPS = process.env.ENABLE_BACKUPS === 'true';
 const ENABLE_LOGGING = process.env.ENABLE_LOGGING === 'true';
 const DB_PATH = process.env.DB_PATH ?? './links.db';
 const DB_BACKUP_DIR_PATH = process.env.DB_BACKUP_DIR_PATH ?? './db/backups';
@@ -61,8 +62,11 @@ const runBackupCycle = () =>
 
 const db = (): DBHandle =>
 {
-	runBackupCycle();
-	setInterval(() => runBackupCycle(), BACKUP_INTERVAL_MS);
+	if (ENABLE_BACKUPS)
+	{
+		runBackupCycle();
+		setInterval(() => runBackupCycle(), BACKUP_INTERVAL_MS);
+	}
 
 	const database = new Database(DB_PATH);
 	database.pragma('journal_mode = WAL');

@@ -1,8 +1,10 @@
 import 'dotenv/config';
 import express from 'express';
 import db from './db.js';
+import isValidLink from './misc/isValidLink.ts';
 
 const ENABLE_LOGGING = process.env.ENABLE_LOGGING === 'true';
+const FULL_HOST = process.env.FULL_HOST ?? 'http://localhost:4214';
 
 const shutdown = () =>
 {
@@ -24,7 +26,7 @@ app.post('/new/:link', async (req, res) =>
 
 	if (!isValidLink(link))
 	{
-		res.status(400).send({ error: 'Invalid link' });
+		res.status(400).send({ error: 'The link must be a valid URL, must begin with "http(s)://" and must not be a private address or the same as this tool\'s hostname.' });
 		return;
 	}
 
@@ -33,7 +35,7 @@ app.post('/new/:link', async (req, res) =>
 
 	if (ENABLE_LOGGING) console.log(`Created a new link ${linkId} for link ${link}`);
 
-	res.send(linkId);
+	res.send({ shortUrl: `${FULL_HOST}/${linkId}` });
 });
 
 app.get('/:id', async (req, res) =>
@@ -57,7 +59,7 @@ app.get('/:id', async (req, res) =>
 
 	if (ENABLE_LOGGING) console.log(`Retrieved ${link.url} for link ID ${linkId}`);
 
-	res.send(link.url);
+	res.redirect(301, link.url);
 });
 
 const port = process.env.PORT ?? 4214;
@@ -77,12 +79,6 @@ const isValidLinkId = (id: string): boolean =>
 	const validLinkIdChars = /^[A-Za-z0-9]+$/;
 	return id.length === parseInt(process.env.LINK_ID_LENGTH ?? "8") && validLinkIdChars.test(id);
 }
-
-const isValidLink = (link: string): boolean =>
-{
-	const validSchemaAndChars = /^https?:\/\/[A-Za-z0-9\-._~!$&'()*+,;=:@/?#%[\]]+$/;
-	return link.length > 0 && link.length <= 2048 && validSchemaAndChars.test(link);
-};
 
 const generateUniqueLinkId = async () =>
 {
