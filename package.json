@@ -15,17 +15,22 @@
 	"type": "module",
 	"homepage": "https://github.com/immorrtalz/Link",
 	"dependencies": {
+		"better-sqlite3": "^13.0.3",
 		"cors": "^2.8.6",
 		"dotenv": "^17.4.2",
-		"express": "^5.2.1",
-		"pg": "^8.23.0"
+		"express": "^5.2.1"
 	},
 	"devDependencies": {
+		"@types/better-sqlite3": "^9.6.0",
 		"@types/cors": "^2.8.19",
 		"@types/express": "^5.0.6",
 		"@types/node": "^26.4.0",
 		"@types/pg": "^8.23.1",
 		"tsx": "^4.23.15",
 		"typescript": "~7.0.2"
+	},
+	"allowScripts": {
+		"better-sqlite3@13.0.3": true,
+		"esbuild@0.28.2": true
 	}
 }

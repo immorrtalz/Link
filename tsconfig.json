@@ -16,7 +16,7 @@
 		"sourceMap": true,
 		"declaration": true,
 		"declarationMap": true,
-		"noUncheckedIndexedAccess": true,
+		"noUncheckedIndexedAccess": false,
 		"exactOptionalPropertyTypes": true,
 		"noUnusedLocals": false,
 		"noUnusedParameters": false,
