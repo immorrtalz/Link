@@ -65,14 +65,14 @@ app.get('/:id', async (req, res) =>
 const port = process.env.PORT ?? 4214;
 app.listen(port, () => console.log(`Server listening on ${port}`));
 
-database.queryWithoutParams(`
-	CREATE TABLE IF NOT EXISTS ${process.env.DB_TABLE_NAME} (
+database.queryWithoutParams(
+	`CREATE TABLE IF NOT EXISTS ${process.env.DB_TABLE_NAME} (
 		id TEXT PRIMARY KEY,
 		url TEXT,
 		CONSTRAINT id_length CHECK (length(id) = ${parseInt(process.env.LINK_ID_LENGTH ?? "8")}),
 		CONSTRAINT url_length CHECK (length(url) > 0 AND length(url) <= 2048)
-	);
-`);
+	);`
+);
 
 const isValidLinkId = (id: string): boolean =>
 {
